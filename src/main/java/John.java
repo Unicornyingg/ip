@@ -64,17 +64,17 @@ public class John {
                 if (line.startsWith("[T]")) {
                     tasks.add(new Todo(line.substring(7)));
                     if (line.charAt(5) == 'X') {
-                        tasks.getLast().markAsDone();
+                        tasks.get(tasks.size() - 1).markAsDone();
                     }
                 } else if (line.startsWith("[D]")) {
                     tasks.add(new Deadline(line.substring(7, line.indexOf(" (by:")), line.substring(line.indexOf("(by:") + 5, line.indexOf(")"))));
                     if (line.charAt(5) == 'X') {
-                        tasks.getLast().markAsDone();
+                        tasks.get(tasks.size() - 1).markAsDone();
                     }
                 } else if (line.startsWith("[E]")) {
                     tasks.add(new Events(line.substring(7, line.indexOf(" (from:")), line.substring(line.indexOf("(from:") + 7, line.indexOf(" to:")), line.substring(line.indexOf("to:") + 4, line.indexOf(")"))));
                     if (line.charAt(5) == 'X') {
-                        tasks.getLast().markAsDone();
+                        tasks.get(tasks.size() - 1).markAsDone();
                     }
                 }
             }
