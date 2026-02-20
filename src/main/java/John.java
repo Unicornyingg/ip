@@ -1,14 +1,16 @@
+import java.nio.file.Path;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.*;
 
 public class John {
 
     private static final String line = "----------------------------------\n";
-    private static final String filepath = "src/main/java/tasks.txt";
+    private static final String filepath = "tasks.txt";
 
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -46,7 +48,20 @@ public class John {
     }
 
     public static void saveToFile(ArrayList<Task> tasks) throws IOException {
-        FileWriter fw = new FileWriter(filepath);
+
+        Path path = Paths.get(filepath);
+
+        Path directory = path.getParent();
+        if (directory != null && !Files.exists(directory)) {
+            Files.createDirectories(directory);
+        }
+
+        if (Files.notExists(path)) {
+            Files.createFile(path);
+        }
+
+        FileWriter fw = new FileWriter(path.toFile());
+
         for (Task task : tasks) {
             fw.write(task.toString() + "\n");
         }
@@ -56,8 +71,28 @@ public class John {
 
     private static ArrayList<Task> loadFromFile(String filepath) throws FileNotFoundException{
         File file = new File(filepath);
+        Path path = Paths.get(filepath);
+        Path directory = path.getParent();
         ArrayList<Task> tasks = new ArrayList<>();
-        if (file.exists()) {
+
+        if (directory != null && !Files.exists(directory)) {
+            try {
+                Files.createDirectories(directory);
+            } catch (IOException e) {
+                System.out.println("Error creating the directory.");
+                return tasks;
+            }
+        }
+
+        if (Files.notExists(path)) {
+            try {
+                Files.createFile(path);
+                System.out.println("File created: " + filepath);
+            } catch (IOException e) {
+                System.out.println("Error creating the file.");
+                return tasks;
+            }
+        }
             Scanner sc = new Scanner(file);
             while (sc.hasNext()) {
                 String line = sc.nextLine().strip();
@@ -79,10 +114,6 @@ public class John {
                 }
             }
             System.out.println("Loaded tasks from file.");
-        }
-        else {
-            System.out.println("create a file in this path src/main/java/tasks.txt ");
-        }
 
         return tasks;
     }

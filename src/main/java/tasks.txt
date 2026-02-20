@@ -1,3 +1,0 @@
-[D][ ] sleep  (by: monday)
-[T][ ] shower
-[E][ ] work  (from: 10  to: 10)
