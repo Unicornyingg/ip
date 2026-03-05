@@ -2,9 +2,17 @@ import java.util.ArrayList;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+/**
+ * Runs john.
+ */
 public class John {
     private static final String filepath = "tasks.txt";
 
+    /**
+     * Starts john.
+     *
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         Ui ui = new Ui();
         Storage storage = new Storage();

@@ -8,9 +8,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Storage.java
+/**
+ * Handles loading tasks from tasks.txt and saving tasks to tasks.txt.
+ */
 public class Storage {
     private static final String filepath = "tasks.txt";
 
+    /**
+     * Saves all tasks to the tasks.txt..
+     *
+     * @param tasks Task list to save.
+     * @throws IOException If writing to tasks.txt fails.
+     */
     public void saveToFile(ArrayList<Task> tasks) throws IOException {
         Path path = Paths.get(filepath);
 
@@ -32,6 +42,13 @@ public class Storage {
         fw.close();
     }
 
+    /**
+     * Loads all tasks from the given file path.
+     *
+     * @param filepath Path to tasks.txt.
+     * @return Loaded tasks.
+     * @throws FileNotFoundException If tasks.txt cannot be opened.
+     */
     public ArrayList<Task> loadFromFile(String filepath) throws FileNotFoundException {
         File file = new File(filepath);
         Path path = Paths.get(filepath);

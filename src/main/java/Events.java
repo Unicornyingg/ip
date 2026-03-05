@@ -4,6 +4,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
+/**
+ * Represents an event task with start and end date/time text.
+ */
 public class Events extends Task{
     private static final DateTimeFormatter OUTPUT_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
@@ -18,11 +21,22 @@ public class Events extends Task{
         this.to = formatDateTime(to.strip());
     }
 
+    /**
+     * Returns the formatted event string.
+     *
+     * @return Event string.
+     */
     @Override
     public String toString(){
         return "[E]" + super.toString() + " " + "(from: " + from + " to: " + to +")";
     }
 
+    /**
+     * Formats a date/time string into the required output style when parseable.
+     *
+     * @param input Raw date/time text.
+     * @return Formatted date/time text or original input.
+     */
     private String formatDateTime(String input) {
         LocalDateTime parsedDateTime = parseDateTime(input);
         if (parsedDateTime != null) {
@@ -37,6 +51,12 @@ public class Events extends Task{
         return input;
     }
 
+    /**
+     * Parses a date-time string using supported formats.
+     *
+     * @param input Date-time input.
+     * @return Parsed LocalDateTime, or null if parsing fails.
+     */
     private LocalDateTime parseDateTime(String input) {
         DateTimeFormatter[] dateTimeFormats = new DateTimeFormatter[] {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
@@ -57,6 +77,12 @@ public class Events extends Task{
         return null;
     }
 
+    /**
+     * Parses a date string using supported formats.
+     *
+     * @param input Date input.
+     * @return Parsed LocalDate, or null if parsing fails.
+     */
     private LocalDate parseDate(String input) {
         DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),

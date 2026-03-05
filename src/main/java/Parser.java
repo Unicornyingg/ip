@@ -1,11 +1,31 @@
 import java.util.ArrayList;
 
+/**
+ * Parses user input into command objects.
+ */
 public class Parser {
+
+    /**
+     * Handles one full command by parsing then executing it.
+     *
+     * @param input Full user input.
+     * @param taskCount Current number of tasks.
+     * @param tasks Current task list.
+     * @return Updated task count.
+     * @throws JohnException If command parsing or execution fails.
+     */
     public int handleCommand(String input, int taskCount, ArrayList<Task> tasks) throws JohnException {
         Command c = parse(input);
         return c.execute(tasks, taskCount);
     }
 
+    /**
+     * Parses the command word and returns the corresponding command object.
+     *
+     * @param input Full user input.
+     * @return Command object for execution.
+     * @throws JohnException If command is invalid or mistyped.
+     */
     public Command parse(String input) throws JohnException {
         String cmd = input.split(" ")[0];
 
