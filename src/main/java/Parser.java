@@ -67,6 +67,12 @@ public class Parser {
             }
             return new DeleteCommand(Integer.parseInt(input.substring(7)));
 
+        case "find":
+            if (input.length() < 5 || input.substring(5).isBlank()) {
+                throw new JohnException("find what? ");
+            }
+            return new FindCommand(input.substring(5).strip());
+
         default:
             throw new JohnException("Invalid command: ");
         }
