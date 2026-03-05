@@ -4,6 +4,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
+/**
+ * Represents a deadline task with a due date text.
+ */
 public class Deadline extends Task{
     private static final DateTimeFormatter OUTPUT_DATE_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
@@ -17,16 +20,28 @@ public class Deadline extends Task{
         this.date = formatDateTime(date.strip());
     }
 
+    /**
+     * Returns the formatted deadline string.
+     *
+     * @return Deadline string.
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " " + "(by: " + date + ")";
     }
 
+    /**
+     * Formats a date/time string into the required output style.
+     *
+     * @param input date/time input.
+     * @return Formatted date/time text or original input.
+     */
     private String formatDateTime(String input) {
         LocalDateTime parsedDateTime = parseDateTime(input);
         if (parsedDateTime != null) {
             return parsedDateTime.format(OUTPUT_DATE_TIME_FORMAT);
         }
+
 
         LocalDate parsedDate = parseDate(input);
         if (parsedDate != null) {
@@ -36,6 +51,13 @@ public class Deadline extends Task{
         return input;
     }
 
+
+    /**
+     * Parses a date-time string using supported formats.
+     *
+     * @param input Date-time input.
+     * @return Parsed LocalDateTime, or null if parsing fails.
+     */
     private LocalDateTime parseDateTime(String input) {
         DateTimeFormatter[] dateTimeFormats = new DateTimeFormatter[] {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm"),
@@ -56,6 +78,12 @@ public class Deadline extends Task{
         return null;
     }
 
+    /**
+     * Parses a date string using supported formats.
+     *
+     * @param input Date input.
+     * @return Parsed LocalDate, or null if parsing fails.
+     */
     private LocalDate parseDate(String input) {
         DateTimeFormatter[] dateFormats = new DateTimeFormatter[] {
             DateTimeFormatter.ofPattern("yyyy-MM-dd"),
