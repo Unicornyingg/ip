@@ -1,49 +1,40 @@
 import java.util.ArrayList;
 
 public class Parser {
-    private static final String line = "----------------------------------\n";
-
     public int handleCommand(String input, int taskCount, ArrayList<Task> tasks) throws JohnException {
+        Command c = parse(input);
+        return c.execute(tasks, taskCount);
+    }
+
+    public Command parse(String input) throws JohnException {
         String cmd = input.split(" ")[0];
 
         switch (cmd) {
         case "bye":
-            return -1;
+            return new ExitCommand();
 
         case "list":
-            System.out.println(line);
-            for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + ". " + tasks.get(i).toString());
-            }
-            return taskCount;
+            return new ListCommand();
 
         case "mark":
             if (input.length() < 5) {
                 throw new JohnException("mark what? ");
             }
             int item = Integer.parseInt(input.substring(5));
-            tasks.get(item - 1).markAsDone();
-            System.out.println("Nice! I've marked this task as done: \n" + tasks.get(item - 1).toString());
-            return taskCount;
+            return new MarkCommand(item);
 
         case "unmark":
             if (input.length() < 7) {
                 throw new JohnException("unmark what? ");
             }
             int idx = Integer.parseInt(input.substring(7));
-            tasks.get(idx - 1).unmarkDone();
-            System.out.println("OK, I've marked this task as not done yet: \n" + tasks.get(idx - 1).toString());
-            return taskCount;
+            return new UnmarkCommand(idx);
 
         case "todo":
             if (input.length() < 5) {
                 throw new JohnException("todo what? ");
             }
-            tasks.add(new Todo(input.substring(5)));
-            System.out.println("Got it. I've added this task: \n" + tasks.get(taskCount).toString() + "\n"
-                    + "Now you have " + (taskCount + 1) + " tasks in the list.");
-            taskCount++;
-            return taskCount;
+            return new AddCommand(new Todo(input.substring(5)));
 
         case "deadline":
             if (input.length() < 9) {
@@ -51,12 +42,8 @@ public class Parser {
             }
 
             try {
-                tasks.add(new Deadline(input.substring(9, input.indexOf("/by")), input.substring(input.indexOf("/by")
-                        + 4)));
-                System.out.println("Got it. I've added this task: \n" + tasks.get(taskCount).toString() + "\n"
-                        + "Now you have " + (taskCount + 1) + " tasks in the list.");
-                taskCount++;
-                return taskCount;
+                return new AddCommand(new Deadline(input.substring(9, input.indexOf("/by")),
+                        input.substring(input.indexOf("/by") + 4)));
             } catch (StringIndexOutOfBoundsException e) {
                 throw new JohnException("Please type in this format: deadline <task> /by <date>");
             }
@@ -67,13 +54,9 @@ public class Parser {
             }
 
             try {
-                tasks.add(new Events(input.substring(6, input.indexOf("/from")),
+                return new AddCommand(new Events(input.substring(6, input.indexOf("/from")),
                         input.substring(input.indexOf("/from") + 6, input.indexOf("/to")),
                         input.substring(input.lastIndexOf("/to") + 4)));
-                System.out.println("Got it. I've added this task: \n" + tasks.get(taskCount).toString() + "\n"
-                        + "Now you have " + (taskCount + 1) + " tasks in the list.");
-                taskCount++;
-                return taskCount;
             } catch (StringIndexOutOfBoundsException e) {
                 throw new JohnException("Please type in this format: event <task> /from <date> /to <date>");
             }
@@ -82,14 +65,7 @@ public class Parser {
             if (input.length() < 8) {
                 throw new JohnException("delete what? ");
             }
-            try {
-                tasks.remove(Integer.parseInt(input.substring(7)) - 1);
-                System.out.println("Deleted task " + (Integer.parseInt(input.substring(7))));
-                taskCount--;
-                return taskCount;
-            } catch (IndexOutOfBoundsException e) {
-                throw new JohnException("Nothing to delete.");
-            }
+            return new DeleteCommand(Integer.parseInt(input.substring(7)));
 
         default:
             throw new JohnException("Invalid command: ");

@@ -21,19 +21,19 @@ public class John {
         int taskCount = taskList.size();
 
         ui.showWelcome();
-        while (true) {
+        boolean isExit = false;
+        while (!isExit) {
             String input = ui.readInput();
 
             try {
-                taskCount = parser.handleCommand(input, taskCount, taskList.getTasks());
-                if (taskCount == -1) {
-                    ui.showBye();
-                    break;
-                }
+                Command c = parser.parse(input);
+                taskCount = c.execute(taskList.getTasks(), taskCount);
+                isExit = c.isExit();
             } catch (JohnException e) {
                 ui.showError(e.getMessage());
             }
         }
+        ui.showBye();
         try {
             storage.saveToFile(taskList.getTasks());
         }
@@ -42,5 +42,4 @@ public class John {
         }
     }
 }
-
 
