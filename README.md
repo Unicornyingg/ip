@@ -1,26 +1,110 @@
-# Duke project template
+# John User Guide
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+John is a command-line task manager. It helps you track todos, deadlines, and events from your terminal.
 
-## Setting up in Intellij
+## Quick Start
 
-Prerequisites: JDK 17, update Intellij to the most recent version.
+1. Ensure you are using JDK 17.
+2. Compile the project:
+   `javac -d out src/main/java/*.java`
+3. Run the app:
+   `java -cp out John`
+4. Enter commands shown in the features below.
 
-1. Open Intellij (if you are not in the welcome screen, click `File` > `Close Project` to close the existing project first)
-1. Open the project into Intellij as follows:
-   1. Click `Open`.
-   1. Select the project directory, and click `OK`.
-   1. If there are any further prompts, accept the defaults.
-1. Configure the project to use **JDK 17** (not other versions) as explained in [here](https://www.jetbrains.com/help/idea/sdk.html#set-up-jdk).<br>
-   In the same dialog, set the **Project language level** field to the `SDK default` option.
-1. After that, locate the `src/main/java/Duke.java` file, right-click it, and choose `Run Duke.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
-   ```
-   Hello from
-    ____        _        
-   |  _ \ _   _| | _____ 
-   | | | | | | | |/ / _ \
-   | |_| | |_| |   <  __/
-   |____/ \__,_|_|\_\___|
-   ```
+John saves tasks to `tasks.txt` in the project root.
 
-**Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+## Features
+
+### Add todo
+
+Adds a todo task.
+
+Format: `todo DESCRIPTION`
+
+Example:
+`todo read book`
+
+### Add deadline
+
+Adds a deadline task.
+
+Format: `deadline DESCRIPTION /by DUE DATE/TIME`
+
+`DUE DATE/TIME` can be:
+- Date only: `yyyy-MM-dd`
+- Date and time: `yyyy-MM-dd HHmm` or `yyyy-MM-dd HH:mm`
+- Any other text (for example: `monday`)
+
+If `DUE DATE/TIME` is parseable as date/time, John prints it as:
+- Date: `MMM dd yyyy` (for example: `Mar 05 2026`)
+- Date-time: `MMM dd yyyy h:mma` (for example: `Mar 05 2026 6:00PM`)
+
+Example:
+`deadline return book /by 2026-03-05 1800`
+
+### Add event
+
+Adds an event task.
+
+Format: `event DESCRIPTION /from START DATE/TIME /to END DATE/TIME`
+
+`START DATE/TIME` and `END DATE/TIME` support the same date/time behavior as deadlines:
+- Parseable values are reformatted to `MMM dd yyyy` or `MMM dd yyyy h:mma`
+- Non-parseable values are kept as entered
+
+Example:
+`event lecture /from 2026-03-06 0900 /to 2026-03-06 1100`
+
+### List tasks
+
+Shows all tasks with numbering.
+
+Format: `list`
+
+### Mark task as done
+
+Marks a task as done.
+
+Format: `mark INDEX`
+
+Example:
+`mark 2`
+
+### Unmark task
+
+Marks a task as not done.
+
+Format: `unmark INDEX`
+
+Example:
+`unmark 2`
+
+### Delete task
+
+Deletes a task.
+
+Format: `delete INDEX`
+
+Example:
+`delete 3`
+
+### Find tasks
+
+Finds tasks whose descriptions contain a keyword.
+
+Format: `find KEYWORD`
+
+Example:
+`find book`
+
+### Exit
+
+Exits John and saves tasks to file.
+
+Format: `bye`
+
+## Notes
+
+- Commands are case-sensitive.
+- Invalid command formats will show an error message.
+- Task data is loaded from `tasks.txt` on startup and saved on exit.
